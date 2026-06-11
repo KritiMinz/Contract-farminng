@@ -43,7 +43,11 @@ exports.login = async (req, res) => {
       process.env.JWT_SECRET
     );
 
-    res.json({ token, role: user.role });
+    res.json({
+  token,
+  role: user.role,
+  userId: user._id, // ✅ ADD THIS
+});
 
   } catch (err) {
   console.error("ERROR:", err);   // 👈 shows full error in terminal

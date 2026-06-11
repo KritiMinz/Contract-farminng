@@ -15,20 +15,28 @@ const contractSchema = new mongoose.Schema({
   },
   quantity: Number,
   price: Number,
+
   status: {
     type: String,
     enum: ["pending", "accepted", "rejected"],
     default: "pending"
   },
+
+  paymentStatus: {
+    type: String,
+    enum: ["pending", "paid"],
+    default: "pending"
+  },
+
+  // 🔥 NEW FIELDS (IMPORTANT)
+  razorpayOrderId: String,
+  razorpayPaymentId: String,
+  paidAt: Date,
+
   createdAt: {
     type: Date,
     default: Date.now
-  },
-  paymentStatus: {
-  type: String,
-  enum: ["pending", "paid"],
-  default: "pending"
-}
+  }
 });
 
 module.exports = mongoose.model("Contract", contractSchema);
