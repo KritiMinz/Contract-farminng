@@ -166,6 +166,56 @@ exports.makePayment = async (req, res) => {
   }
 };
 
+// 🚚 Update Delivery Status
+exports.updateDeliveryStatus = async (req, res) => {
+  try {
+
+    const { deliveryStatus } = req.body;
+
+    const contract = await Contract.findById(
+      req.params.id
+    );
+
+    if (!contract) {
+      return res.status(404).json({
+        message: "Contract not found",
+      });
+    }
+
+    if (
+      contract.farmerId.toString() !==
+      req.user.id
+    ) {
+      return res.status(403).json({
+        message: "Not authorized",
+      });
+    }
+
+    contract.deliveryStatus =
+      deliveryStatus;
+
+    await contract.save();
+
+    global.io
+      .to(contract.buyerId.toString())
+      .emit("deliveryUpdate", {
+        deliveryStatus,
+      });
+
+    res.json({
+      message:
+        "Delivery status updated",
+    });
+
+  } catch (err) {
+
+    res.status(500).json({
+      error: err.message,
+    });
+
+  }
+};
+
 // 📊 Farmer Statistics
 exports.getFarmerStats = async (req, res) => {
   try {
@@ -243,11 +293,20 @@ exports.getDashboardStats = async (req, res) => {
           paymentStatus: "paid",
         });
 
-      const earnings =
+        console.log("USER:", userId);
+console.log("PAID CONTRACTS:", paidContracts);
+
+      {/*const earnings =
         paidContracts.reduce(
           (sum, c) => sum + c.price,
           0
-        );
+        );*/}
+        const earnings =
+  paidContracts.reduce(
+    (sum, c) => sum + (c.price || 0),
+    0
+  );
+        console.log("EARNINGS:", earnings);
 
       const reviews =
         await Review.find({
@@ -286,11 +345,22 @@ exports.getDashboardStats = async (req, res) => {
           paymentStatus: "paid",
         });
 
-      const totalSpent =
+      {/*const totalSpent =
         paidContracts.reduce(
           (sum, c) => sum + c.price,
           0
-        );
+        );*/}
+
+        console.log("BUYER USER:", userId);
+
+console.log("PAID CONTRACTS:", paidContracts);
+        const totalSpent =
+  paidContracts.reduce(
+    (sum, c) => sum + (c.price || 0),
+    0
+  );
+
+  console.log("TOTAL SPENT:",totalSpent);
 
       const reviewsGiven =
         await Review.countDocuments({

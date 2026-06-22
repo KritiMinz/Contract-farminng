@@ -1,4 +1,5 @@
 const Review = require("../models/Review");
+const Contract = require("../models/Contract");
 
 
 // ✅ ADD REVIEW
@@ -52,9 +53,11 @@ exports.getFarmerReviews = async (req, res) => {
 // ✅ GET FARMER RATING STATS
 exports.getFarmerStats = async (req, res) => {
   try {
+    const farmerId = req.params.id;
 
+    // Reviews
     const reviews = await Review.find({
-      farmerId: req.params.id,
+      farmerId,
     });
 
     const totalReviews = reviews.length;
@@ -63,21 +66,61 @@ exports.getFarmerStats = async (req, res) => {
       totalReviews === 0
         ? 0
         : reviews.reduce(
-            (sum, review) => sum + review.rating,
+            (sum, r) => sum + r.rating,
             0
           ) / totalReviews;
+
+    // Contracts
+    const contracts = await Contract.find({
+      farmerId,
+    });
+
+    const completedContracts =
+      contracts.filter(
+        (c) => c.paymentStatus === "paid"
+      ).length;
+
+    const acceptedContracts =
+      contracts.filter(
+        (c) => c.status === "accepted"
+      ).length;
+
+    const successRate =
+      contracts.length === 0
+        ? 0
+        : (
+            (acceptedContracts /
+              contracts.length) *
+            100
+          );
+
+    // Trust Score
+    const trustScore = Math.min(
+      100,
+      (
+        completedContracts * 0.4 +
+        successRate * 0.4 +
+        averageRating * 20 * 0.2
+      ).toFixed(0)
+    );
 
     res.json({
       averageRating:
         averageRating.toFixed(1),
+
       totalReviews,
+
+      completedContracts,
+
+      successRate:
+        successRate.toFixed(1),
+
+      trustScore,
     });
 
   } catch (err) {
-
     res.status(500).json({
       error: err.message,
     });
-
   }
 };

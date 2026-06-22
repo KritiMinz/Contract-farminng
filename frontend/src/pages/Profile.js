@@ -17,7 +17,7 @@ const [farmerStats, setFarmerStats] = useState({
   totalEarnings: 0,
   totalCrops: 0,
 });
-
+const [reputation, setReputation] = useState(null);
 
 const averageRating =
   reviews.length > 0
@@ -34,7 +34,21 @@ const averageRating =
   fetchFarmerCrops();
   fetchReviews();
   fetchFarmerStats();
+  fetchReputation();
 }, []);
+
+const fetchReputation = async () => {
+  try {
+    const res = await API.get(
+      `/reputation/${id}`
+    );
+
+    setReputation(res.data);
+
+  } catch (err) {
+    console.error(err);
+  }
+};
 
 const fetchFarmer = async () => {
   try {
@@ -89,6 +103,7 @@ const fetchFarmerStats = async () => {
 
   }
 };
+
 
 const submitReview = async () => {
   try {
@@ -145,8 +160,8 @@ const submitReview = async () => {
     <div className="mt-4 text-center">
 
       <p className="text-yellow-600 text-lg">
-        ⭐ {averageRating} Rating
-      </p>
+  ⭐ {reputation?.averageRating || averageRating} Rating
+</p>
 
       <p>
         📝 {reviews.length} Reviews
@@ -168,28 +183,62 @@ const submitReview = async () => {
         💰 ₹{farmerStats.totalEarnings}
       </p>
 
-      <hr className="my-3" />
+      {reputation && (
+  <div className="mt-4 bg-green-50 p-4 rounded-lg">
 
-      {averageRating >= 4.8 && (
-        <p className="font-bold text-yellow-600">
-          🏆 Elite Farmer
-        </p>
-      )}
+    <h3 className="font-bold text-lg mb-2">
+      ⭐ Farmer Reputation
+    </h3>
 
-      {averageRating >= 4.5 &&
-        averageRating < 4.8 && (
-          <p className="font-bold text-green-600">
-            ⭐ Top Farmer
-          </p>
-      )}
+    <p>
+      ⭐ Average Rating:
+      <strong> {reputation.averageRating}</strong>
+    </p>
 
-      {averageRating >= 4.0 &&
-        averageRating < 4.5 && (
-          <p className="font-bold text-blue-600">
-            🌱 Trusted Farmer
-          </p>
-      )}
+    <p>
+      📄 Completed Contracts:
+      <strong> {reputation.completedContracts}</strong>
+    </p>
 
+    <p>
+      ✅ Success Rate:
+      <strong> {reputation.successRate}%</strong>
+    </p>
+
+    <p className="text-xl font-bold text-green-700 mt-2">
+      🏆 Trust Score:
+      {reputation.trustScore}/100
+    </p>
+    <hr className="my-3" />
+
+{reputation.trustScore >= 90 && (
+  <p className="font-bold text-yellow-600 text-lg">
+    🏆 Elite Farmer
+  </p>
+)}
+
+{reputation.trustScore >= 75 &&
+  reputation.trustScore < 90 && (
+    <p className="font-bold text-green-600 text-lg">
+      ⭐ Top Farmer
+    </p>
+)}
+
+{reputation.trustScore >= 60 &&
+  reputation.trustScore < 75 && (
+    <p className="font-bold text-blue-600 text-lg">
+      🌱 Trusted Farmer
+    </p>
+)}
+
+{reputation.trustScore < 60 && (
+  <p className="font-bold text-gray-600 text-lg">
+    🌾 New Farmer
+  </p>
+)}
+
+  </div>
+)}
     </div>
 
   </div>

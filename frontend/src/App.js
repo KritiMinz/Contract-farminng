@@ -63,7 +63,10 @@ function Layout() {
   return (
     <>
       {/* Hide Navbar on login page */}
-      {location.pathname !== "/" && <Navbar />}
+      {location.pathname !== "/" &&
+ location.pathname !== "/register" && (
+  <Navbar />
+)}
 
       {/* Toast Notifications */}
       <ToastContainer position="top-right" autoClose={2000} />

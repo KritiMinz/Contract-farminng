@@ -23,6 +23,7 @@ const invoiceRoutes = require("./routes/invoiceRoutes");
 const chatRoutes = require("./routes/chatRoutes");
 const Message = require("./models/Message");
 const userRoutes = require("./routes/userRoutes");
+const reputationRoutes = require("./routes/reputationRoutes");
 
 app.use("/api/auth", authRoutes);
 app.use("/api/crops", cropRoutes);
@@ -32,6 +33,8 @@ app.use("/api/reviews", reviewRoutes);
 app.use("/api/invoice", invoiceRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/reputation", reputationRoutes);
+app.use("/api/prediction", require("./routes/predictionRoutes"));
 
 // ✅ Test route
 app.get("/", (req, res) => {

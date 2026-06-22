@@ -92,17 +92,16 @@ function Contracts() {
               className="bg-white p-5 rounded-xl shadow hover:shadow-lg transition"
             >
               <h3 className="text-xl font-semibold mb-2">
-                {c.cropId?.cropName}
-              </h3>
+  {c.cropId?.cropName || "Deleted Crop"}
+</h3>
 
               <p className="text-gray-600">
-                Buyer: {c.buyerId?.name}
-              </p>
+  Buyer: {c.buyerId?.name || "Deleted Buyer"}
+</p>
 
-              {role === "buyer" && (
+              {role === "buyer" && c.farmerId && (
   <p className="text-gray-600">
     Farmer:
-
     <Link
       to={`/profile/${
         typeof c.farmerId === "object"
@@ -139,13 +138,43 @@ function Contracts() {
     {c.paymentStatus}
   </span>
 </p>
+<div className="mt-4">
 
-{role === "farmer" && (
+  <div className="flex justify-between text-sm">
+
+    <span>📦</span>
+    <span>🚚</span>
+    <span>🛣️</span>
+    <span>✅</span>
+
+  </div>
+
+  <div className="w-full bg-gray-200 h-2 rounded mt-2">
+    <div
+      className={`h-2 rounded bg-green-500 ${
+        c.deliveryStatus === "processing"
+          ? "w-1/4"
+          : c.deliveryStatus === "shipped"
+          ? "w-2/4"
+          : c.deliveryStatus === "in_transit"
+          ? "w-3/4"
+          : c.deliveryStatus === "delivered"
+          ? "w-full"
+          : "w-0"
+      }`}
+    ></div>
+  </div>
+
+  <p className="mt-2 font-semibold capitalize">
+    {c.deliveryStatus?.replace("_", " ")}
+  </p>
+
+</div>
+
+{role === "farmer" && c.buyerId && (
   <Link
     to={`/chat/${
-      typeof c.buyerId === "object"
-        ? c.buyerId._id
-        : c.buyerId
+      c.buyerId?._id || c.buyerId
     }`}
   >
     <button className="mt-3 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
@@ -172,6 +201,51 @@ function Contracts() {
                   </button>
                 </div>
               )}
+
+              {role === "farmer" &&
+ c.paymentStatus === "paid" && (
+
+<div className="mt-4">
+
+<select
+  value={c.deliveryStatus}
+  onChange={async (e) => {
+
+    await API.put(
+      `/contracts/delivery/${c._id}`,
+      {
+        deliveryStatus:
+          e.target.value,
+      }
+    );
+
+    fetchContracts();
+
+  }}
+  className="border p-2 rounded"
+>
+
+<option value="processing">
+Processing
+</option>
+
+<option value="shipped">
+Shipped
+</option>
+
+<option value="in_transit">
+In Transit
+</option>
+
+<option value="delivered">
+Delivered
+</option>
+
+</select>
+
+</div>
+
+)}
 
               {/* Buyer payment */}
               {role === "buyer" &&

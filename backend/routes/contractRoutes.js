@@ -8,7 +8,8 @@ const {
   makePayment,
   createOrder,
   getDashboardStats,
-  getFarmerStats
+  getFarmerStats,
+  updateDeliveryStatus
 } = require("../controllers/contractController");
 
 const auth = require("../middleware/authMiddleware");
@@ -32,6 +33,7 @@ router.put("/:id", auth, updateStatus);
 
 // 💳 Buyer makes payment
 router.put("/pay/:id", auth, makePayment);
+router.put("/delivery/:id", auth, updateDeliveryStatus);
 
 // 🔥 💳 Razorpay order creation (NEW)
 router.post("/create-order", auth, createOrder);

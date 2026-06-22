@@ -28,6 +28,17 @@ const contractSchema = new mongoose.Schema({
     default: "pending"
   },
 
+  deliveryStatus: {
+  type: String,
+  enum: [
+    "processing",
+    "shipped",
+    "in_transit",
+    "delivered"
+  ],
+  default: "processing"
+},
+
   // 🔥 NEW FIELDS (IMPORTANT)
   razorpayOrderId: String,
   razorpayPaymentId: String,

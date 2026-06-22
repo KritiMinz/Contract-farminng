@@ -41,18 +41,56 @@ function MyProfile() {
   return (
     <div className="min-h-screen bg-gray-100 p-6">
 
-      <div className="max-w-lg mx-auto bg-white p-6 rounded shadow">
+      <div className="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-lg">
 
-        <h2 className="text-3xl font-bold mb-6">
-          My Profile
-        </h2>
+        <div className="text-center mb-6">
+  <h2 className="text-4xl font-bold text-green-700">
+    👤 My Profile
+  </h2>
+
+  <p className="text-gray-500 mt-2">
+    Manage your personal information
+  </p>
+</div>
         {user.profileImage && (
   <img
     src={user.profileImage}
     alt="Profile"
-    className="w-32 h-32 rounded-full object-cover mx-auto mb-4 border"
+    className="
+      w-36 h-36
+      rounded-full
+      object-cover
+      mx-auto
+      mb-6
+      border-4
+      border-green-500
+      shadow-lg
+    "
   />
 )}
+<div className="grid grid-cols-2 gap-4 mb-6">
+
+  <div className="bg-green-50 p-4 rounded-xl text-center">
+    <p className="text-gray-500">
+      Status
+    </p>
+
+    <p className="font-bold text-green-600">
+      Active
+    </p>
+  </div>
+
+  <div className="bg-blue-50 p-4 rounded-xl text-center">
+    <p className="text-gray-500">
+      Role
+    </p>
+
+    <p className="font-bold text-blue-600 capitalize">
+      {localStorage.getItem("role")}
+    </p>
+  </div>
+
+</div>
 
         <input
           type="text"
@@ -61,14 +99,32 @@ function MyProfile() {
             setUser({ ...user, name: e.target.value })
           }
           placeholder="Name"
-          className="w-full border p-2 mb-3 rounded"
+          className="
+w-full
+border
+border-gray-300
+p-3
+mb-4
+rounded-xl
+focus:outline-none
+focus:ring-2
+focus:ring-green-500
+"
         />
 
         <input
           type="email"
           value={user.email}
           disabled
-          className="w-full border p-2 mb-3 rounded bg-gray-100"
+          className="
+w-full
+border
+border-gray-300
+p-3
+mb-4
+rounded-xl
+bg-gray-100
+"
         />
 
         <input
@@ -78,7 +134,17 @@ function MyProfile() {
             setUser({ ...user, phone: e.target.value })
           }
           placeholder="Phone"
-          className="w-full border p-2 mb-3 rounded"
+          className="
+w-full
+border
+border-gray-300
+p-3
+mb-4
+rounded-xl
+focus:outline-none
+focus:ring-2
+focus:ring-green-500
+"
         />
 
         <input
@@ -91,7 +157,17 @@ function MyProfile() {
             })
           }
           placeholder="Location"
-          className="w-full border p-2 mb-3 rounded"
+          className="
+w-full
+border
+border-gray-300
+p-3
+mb-4
+rounded-xl
+focus:outline-none
+focus:ring-2
+focus:ring-green-500
+"
         />
 
         <input
@@ -104,15 +180,39 @@ function MyProfile() {
     })
   }
   placeholder="Profile Image URL"
-  className="w-full border p-2 mb-3 rounded"
+  className="
+w-full
+border
+border-gray-300
+p-3
+mb-4
+rounded-xl
+focus:outline-none
+focus:ring-2
+focus:ring-green-500
+"
 />
 
         <button
-          onClick={updateProfile}
-          className="bg-green-500 text-white px-4 py-2 rounded"
-        >
-          Save Changes
-        </button>
+  onClick={updateProfile}
+  className="
+    w-full
+    bg-green-500
+    text-white
+    py-3
+    rounded-xl
+    shadow-md
+    hover:bg-green-600
+    hover:scale-105
+    transition
+  "
+>
+  💾 Save Changes
+</button>
+
+<div className="mt-8 text-center text-gray-500">
+  Contract Farming Platform © 2026
+</div>
 
       </div>
     </div>

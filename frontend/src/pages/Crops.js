@@ -142,6 +142,9 @@ const editCrop = async (crop) => {
     <h2 className="text-3xl font-bold mb-6 text-gray-800">
       Available Crops
     </h2>
+    <p className="text-gray-500 mb-6">
+  Total Listings: {crops.length}
+</p>
 
     {/* 🔍 FILTER UI START */}
     <div className="mb-6 grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -195,18 +198,27 @@ const editCrop = async (crop) => {
 
         {crops.map((crop) => (
   <div
-    key={crop._id}
-    className="bg-white p-5 rounded-xl shadow hover:shadow-lg transition"
-  >
-    {crop.imageUrl && (
-      <img
-        src={crop.imageUrl}
-        alt={crop.cropName}
-        className="w-full h-40 object-cover rounded mb-3"
-      />
-    )}
+  key={crop._id}
+  className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all duration-300"
+>
+    <div className="relative">
 
-    <h3 className="text-xl font-semibold mb-2">
+  {crop.imageUrl && (
+    <img
+      src={crop.imageUrl}
+      alt={crop.cropName}
+      className="w-full h-48 object-cover"
+    />
+  )}
+
+  <span className="absolute top-3 right-3 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+    Fresh
+  </span>
+
+</div>
+<div className="p-5">
+
+    <h3 className="text-2xl font-bold text-gray-800 mb-2">
       {crop.cropName}
     </h3>
 
@@ -218,15 +230,19 @@ const editCrop = async (crop) => {
       Quantity: {crop.quantity}
     </p>
 
-    <p className="text-green-600 font-bold text-lg">
-      ₹{crop.pricePerUnit} / unit
-    </p>
+    <p className="text-2xl font-bold text-green-600 mt-2">
+  ₹{crop.pricePerUnit}
+</p>
+
+<p className="text-gray-500 text-sm">
+  per unit
+</p>
 
     {/* Buyer Actions */}
     {role === "buyer" && (
       <button
         onClick={() => requestContract(crop._id)}
-        className="mt-4 w-full bg-green-500 text-white py-2 rounded hover:bg-green-600 transition"
+        className="mt-4 w-full bg-green-500 text-white py-3 rounded-xl shadow hover:scale-105 hover:bg-green-600 transition"
       >
         Request Contract
       </button>
@@ -238,20 +254,20 @@ const editCrop = async (crop) => {
 
         <button
           onClick={() => navigate(`/edit-crop/${crop._id}`)}
-          className="flex-1 bg-yellow-500 text-white py-2 rounded hover:bg-yellow-600"
+          className="flex-1 bg-yellow-500 text-white py-3 rounded-xl shadow hover:scale-105 transition"
         >
           ✏️ Edit
         </button>
 
         <button
           onClick={() => deleteCrop(crop._id)}
-          className="flex-1 bg-red-500 text-white py-2 rounded hover:bg-red-600"
+          className="flex-1 bg-red-500 text-white py-3 rounded-xl shadow hover:scale-105 transition"
         >
           🗑 Delete
         </button>
 
       </div>
-    )}
+    )}</div>
   </div>
 ))}
       </div>
