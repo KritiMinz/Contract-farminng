@@ -1,12 +1,14 @@
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:5000", {
-  transports: ["websocket"],
-});
+const socket = io(
+  "https://contract-farminng.onrender.com",
+  {
+    transports: ["websocket"],
+  }
+);
 
-// ✅ SEND USER ID AFTER CONNECT
 socket.on("connect", () => {
-  const userId = localStorage.getItem("userId"); // 🔥 IMPORTANT
+  const userId = localStorage.getItem("userId");
 
   if (userId) {
     socket.emit("join", userId);
