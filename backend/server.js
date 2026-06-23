@@ -47,10 +47,12 @@ const server = http.createServer(app);
 // 🔥 SOCKET.IO SETUP
 const io = new Server(server, {
   cors: {
-    origin: "*",
+    origin: [
+      "https://contract-farminng-vyss.vercel.app"
+    ],
+    methods: ["GET", "POST"],
   },
 });
-
 // 🔥 MAKE GLOBAL (important)
 global.io = io;
 
